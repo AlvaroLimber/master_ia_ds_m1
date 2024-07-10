@@ -1,0 +1,32 @@
+--- 
+title: "Modulo 1: Preparación de datos y análisis exploratorio"
+subtitle: "Maestría en Inteligencia Artificial, Data Science para la transformación de negocios"
+author: "MSc. Alvaro Chirino Gutierrez"
+description: "Apuntes básicos"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+graphics: yes
+github-repo: alvarolimber/big-data
+bibliography: book.bib
+nocite: '@*'
+pandoc_args: ["-Fpandoc-crossref"]
+---
+# Prefacio {-}
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Este documento de [Alvaro Chirino](https://twiiter/alvarochirinog) esta bajo la licencia de <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+
+## Estructura del libro  {-}
+
+El libro inluye 5 capitulos, estos son:
+
+1.	Introducción a R
+2.	Fundamentos del análisis de datos
+3.	Fuentes de información y Raspado web 
+4.	Gramática de la manipulación de datos
+5.	Introducción a la visualización de datos
+
+## Software y acuerdos {-}
+
+## Bases de datos {-}

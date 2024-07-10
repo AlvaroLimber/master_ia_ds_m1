@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Modulo 1: Preparación de datos y análisis exploratorio</title>
+  <meta name="description" content="Apuntes básicos" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Modulo 1: Preparación de datos y análisis exploratorio" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Apuntes básicos" />
+  <meta name="github-repo" content="alvarolimber/big-data" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Modulo 1: Preparación de datos y análisis exploratorio" />
+  
+  <meta name="twitter:description" content="Apuntes básicos" />
+  
+
+<meta name="author" content="MSc. Alvaro Chirino Gutierrez" />
+
+
+<meta name="date" content="2024-07-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="introducción-a-r.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prefacio</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#estructura-del-libro"><i class="fa fa-check"></i>Estructura del libro</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#software-y-acuerdos"><i class="fa fa-check"></i>Software y acuerdos</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#bases-de-datos"><i class="fa fa-check"></i>Bases de datos</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="introducción-a-r.html"><a href="introducción-a-r.html"><i class="fa fa-check"></i><b>1</b> Introducción a R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introducción-a-r.html"><a href="introducción-a-r.html#qué-es-r"><i class="fa fa-check"></i><b>1.1</b> ¿Qué es R?</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="introducción-a-r.html"><a href="introducción-a-r.html#algo-de-historia-de-r"><i class="fa fa-check"></i><b>1.1.1</b> Algo de historia de R</a></li>
+<li class="chapter" data-level="1.1.2" data-path="introducción-a-r.html"><a href="introducción-a-r.html#acerca-de-r"><i class="fa fa-check"></i><b>1.1.2</b> Acerca de R</a></li>
+<li class="chapter" data-level="1.1.3" data-path="introducción-a-r.html"><a href="introducción-a-r.html#qué-es-r-1"><i class="fa fa-check"></i><b>1.1.3</b> ¿Qué es R?</a></li>
+<li class="chapter" data-level="1.1.4" data-path="introducción-a-r.html"><a href="introducción-a-r.html#algunas-referencias"><i class="fa fa-check"></i><b>1.1.4</b> Algunas referencias</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="introducción-a-r.html"><a href="introducción-a-r.html#rstudio"><i class="fa fa-check"></i><b>1.2</b> RStudio</a></li>
+<li class="chapter" data-level="1.3" data-path="introducción-a-r.html"><a href="introducción-a-r.html#instalación"><i class="fa fa-check"></i><b>1.3</b> Instalación</a></li>
+<li class="chapter" data-level="1.4" data-path="introducción-a-r.html"><a href="introducción-a-r.html#github-y-el-trabajo-en-repositorios"><i class="fa fa-check"></i><b>1.4</b> Github y el trabajo en repositorios</a></li>
+<li class="chapter" data-level="1.5" data-path="introducción-a-r.html"><a href="introducción-a-r.html#r-markdown"><i class="fa fa-check"></i><b>1.5</b> R Markdown</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="introducción-a-r.html"><a href="introducción-a-r.html#instalación-1"><i class="fa fa-check"></i><b>1.5.1</b> Instalación</a></li>
+<li class="chapter" data-level="1.5.2" data-path="introducción-a-r.html"><a href="introducción-a-r.html#yaml-header"><i class="fa fa-check"></i><b>1.5.2</b> YAML Header</a></li>
+<li class="chapter" data-level="1.5.3" data-path="introducción-a-r.html"><a href="introducción-a-r.html#sintaxis-básica"><i class="fa fa-check"></i><b>1.5.3</b> Sintaxis básica</a></li>
+<li class="chapter" data-level="1.5.4" data-path="introducción-a-r.html"><a href="introducción-a-r.html#tipos-de-documentos"><i class="fa fa-check"></i><b>1.5.4</b> Tipos de documentos</a></li>
+<li class="chapter" data-level="1.5.5" data-path="introducción-a-r.html"><a href="introducción-a-r.html#chunks"><i class="fa fa-check"></i><b>1.5.5</b> Chunks</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="introducción-a-r.html"><a href="introducción-a-r.html#r-básico"><i class="fa fa-check"></i><b>1.6</b> R básico</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="introducción-a-r.html"><a href="introducción-a-r.html#lógica-de-los-comandos-en-r"><i class="fa fa-check"></i><b>1.6.1</b> Lógica de los comandos en R</a></li>
+<li class="chapter" data-level="1.6.2" data-path="introducción-a-r.html"><a href="introducción-a-r.html#palabras-reservadas-y-simbolos-especiales-de-r"><i class="fa fa-check"></i><b>1.6.2</b> Palabras reservadas y simbolos especiales de R</a></li>
+<li class="chapter" data-level="1.6.3" data-path="introducción-a-r.html"><a href="introducción-a-r.html#símbolos-lógicos"><i class="fa fa-check"></i><b>1.6.3</b> Símbolos Lógicos</a></li>
+<li class="chapter" data-level="1.6.4" data-path="introducción-a-r.html"><a href="introducción-a-r.html#asignación-o-creación-de-objetos-estructuras-variables"><i class="fa fa-check"></i><b>1.6.4</b> Asignación o creación de objetos (estructuras, variables)</a></li>
+<li class="chapter" data-level="1.6.5" data-path="introducción-a-r.html"><a href="introducción-a-r.html#clases-en-r"><i class="fa fa-check"></i><b>1.6.5</b> Clases en R</a></li>
+<li class="chapter" data-level="1.6.6" data-path="introducción-a-r.html"><a href="introducción-a-r.html#algunas-comandos-adicionales"><i class="fa fa-check"></i><b>1.6.6</b> Algunas comandos adicionales</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="introducción-a-r.html"><a href="introducción-a-r.html#tipos-de-estructuras-en-r"><i class="fa fa-check"></i><b>1.7</b> Tipos de estructuras en R</a>
+<ul>
+<li class="chapter" data-level="1.7.1" data-path="introducción-a-r.html"><a href="introducción-a-r.html#homogéneas"><i class="fa fa-check"></i><b>1.7.1</b> Homogéneas</a></li>
+<li class="chapter" data-level="1.7.2" data-path="introducción-a-r.html"><a href="introducción-a-r.html#heterogéneas"><i class="fa fa-check"></i><b>1.7.2</b> Heterogéneas</a></li>
+</ul></li>
+<li class="chapter" data-level="1.8" data-path="introducción-a-r.html"><a href="introducción-a-r.html#indexación-en-r"><i class="fa fa-check"></i><b>1.8</b> Indexación en R</a></li>
+<li class="chapter" data-level="1.9" data-path="introducción-a-r.html"><a href="introducción-a-r.html#loops-y-condiciones-en-r"><i class="fa fa-check"></i><b>1.9</b> Loops y condiciones en R</a></li>
+<li class="chapter" data-level="1.10" data-path="introducción-a-r.html"><a href="introducción-a-r.html#crear-funciones-en-r."><i class="fa fa-check"></i><b>1.10</b> Crear funciones en R.</a></li>
+<li class="chapter" data-level="1.11" data-path="introducción-a-r.html"><a href="introducción-a-r.html#flexdashboard"><i class="fa fa-check"></i><b>1.11</b> Flexdashboard</a></li>
+<li class="chapter" data-level="1.12" data-path="introducción-a-r.html"><a href="introducción-a-r.html#shiny"><i class="fa fa-check"></i><b>1.12</b> Shiny</a>
+<ul>
+<li class="chapter" data-level="1.12.1" data-path="introducción-a-r.html"><a href="introducción-a-r.html#ui"><i class="fa fa-check"></i><b>1.12.1</b> UI</a></li>
+<li class="chapter" data-level="1.12.2" data-path="introducción-a-r.html"><a href="introducción-a-r.html#server"><i class="fa fa-check"></i><b>1.12.2</b> Server</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html"><i class="fa fa-check"></i><b>2</b> Fundamentos de análisis de datos</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#conceptos-y-terminología"><i class="fa fa-check"></i><b>2.1</b> Conceptos y terminología</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#actividad-1"><i class="fa fa-check"></i><b>2.1.1</b> Actividad 1</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#analítica-de-datos"><i class="fa fa-check"></i><b>2.2</b> Analítica de datos</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#análisis-descriptivo"><i class="fa fa-check"></i><b>2.2.1</b> Análisis descriptivo</a></li>
+<li class="chapter" data-level="2.2.2" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#análisis-de-diagnóstico"><i class="fa fa-check"></i><b>2.2.2</b> Análisis de diagnóstico</a></li>
+<li class="chapter" data-level="2.2.3" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#análisis-predictivo"><i class="fa fa-check"></i><b>2.2.3</b> Análisis predictivo</a></li>
+<li class="chapter" data-level="2.2.4" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#análisis-prescriptivo"><i class="fa fa-check"></i><b>2.2.4</b> Análisis prescriptivo</a></li>
+<li class="chapter" data-level="2.2.5" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#ejercicio"><i class="fa fa-check"></i><b>2.2.5</b> Ejercicio</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#inteligencia-de-negocios-bi"><i class="fa fa-check"></i><b>2.3</b> Inteligencia de Negocios (BI)</a></li>
+<li class="chapter" data-level="2.4" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#indicadores-clave-de-rendimiento-kpi-key-performance-indicators"><i class="fa fa-check"></i><b>2.4</b> Indicadores clave de rendimiento (KPI: Key Performance Indicators)</a></li>
+<li class="chapter" data-level="2.5" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#tipos-de-datos"><i class="fa fa-check"></i><b>2.5</b> Tipos de datos</a></li>
+<li class="chapter" data-level="2.6" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#captura-y-preservación"><i class="fa fa-check"></i><b>2.6</b> Captura y preservación</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#fuentes-convencionales"><i class="fa fa-check"></i><b>2.6.1</b> Fuentes convencionales</a></li>
+<li class="chapter" data-level="2.6.2" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#datos-web-y-apis"><i class="fa fa-check"></i><b>2.6.2</b> Datos web y APIs</a></li>
+<li class="chapter" data-level="2.6.3" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#record-linkage-enlacesllaves"><i class="fa fa-check"></i><b>2.6.3</b> Record Linkage (enlaces/llaves)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#calidad-de-dato"><i class="fa fa-check"></i><b>2.7</b> Calidad de dato</a></li>
+<li class="chapter" data-level="2.8" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#análisis-y-modelado"><i class="fa fa-check"></i><b>2.8</b> Análisis y modelado</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#machine-learning"><i class="fa fa-check"></i><b>2.8.1</b> Machine learning</a></li>
+<li class="chapter" data-level="2.8.2" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#análisis-de-texto-entendiendo-lo-que-la-gente-escribe"><i class="fa fa-check"></i><b>2.8.2</b> Análisis de texto: Entendiendo lo que la gente escribe</a></li>
+<li class="chapter" data-level="2.8.3" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#networks-análisis-de-redes"><i class="fa fa-check"></i><b>2.8.3</b> Networks (Análisis de redes)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#información-y-visualización"><i class="fa fa-check"></i><b>2.9</b> Información y visualización</a></li>
+<li class="chapter" data-level="2.10" data-path="fundamentos-de-análisis-de-datos.html"><a href="fundamentos-de-análisis-de-datos.html#ejercicios"><i class="fa fa-check"></i><b>2.10</b> Ejercicios</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html"><i class="fa fa-check"></i><b>3</b> Scraping Web (Raspado web)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#pasos-para-la-recopilación-de-información-flujo-de-trabajo"><i class="fa fa-check"></i><b>3.1</b> Pasos para la recopilación de información (flujo de trabajo)</a></li>
+<li class="chapter" data-level="3.2" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#tecnologías-de-diseminación-extracción-y-almacenamiento-web"><i class="fa fa-check"></i><b>3.2</b> Tecnologías de diseminación, extracción y almacenamiento Web</a></li>
+<li class="chapter" data-level="3.3" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#librerías-en-r"><i class="fa fa-check"></i><b>3.3</b> Librerías en R</a></li>
+<li class="chapter" data-level="3.4" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#html"><i class="fa fa-check"></i><b>3.4</b> HTML</a></li>
+<li class="chapter" data-level="3.5" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#librería-rvest"><i class="fa fa-check"></i><b>3.5</b> Librería rvest</a></li>
+<li class="chapter" data-level="3.6" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#librería-rvest-1"><i class="fa fa-check"></i><b>3.6</b> Librería rvest</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-covid-19"><i class="fa fa-check"></i><b>3.6.1</b> Ejemplo: COVID-19</a></li>
+<li class="chapter" data-level="3.6.2" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejercicio-prensa-digital"><i class="fa fa-check"></i><b>3.6.2</b> Ejercicio: Prensa digital</a></li>
+<li class="chapter" data-level="3.6.3" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-tiendas-digitales"><i class="fa fa-check"></i><b>3.6.3</b> Ejemplo: Tiendas digitales</a></li>
+<li class="chapter" data-level="3.6.4" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-enlaces-descargables"><i class="fa fa-check"></i><b>3.6.4</b> Ejemplo: enlaces descargables</a></li>
+<li class="chapter" data-level="3.6.5" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-armar-una-base-de-datos-de-una-tienda-digital"><i class="fa fa-check"></i><b>3.6.5</b> Ejemplo: armar una base de datos de una tienda digital</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#apis"><i class="fa fa-check"></i><b>3.7</b> APIs</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#api-google-trends"><i class="fa fa-check"></i><b>3.7.1</b> API Google trends</a></li>
+<li class="chapter" data-level="3.7.2" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#api-banco-mundial"><i class="fa fa-check"></i><b>3.7.2</b> API Banco Mundial</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplos-pasados"><i class="fa fa-check"></i><b>3.8</b> Ejemplos pasados</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-infocasas-ventas-la-paz"><i class="fa fa-check"></i><b>3.8.1</b> Ejemplo: Infocasas, ventas La Paz</a></li>
+<li class="chapter" data-level="3.8.2" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-titulares-de-la-razon"><i class="fa fa-check"></i><b>3.8.2</b> Ejemplo: Titulares de La Razon</a></li>
+<li class="chapter" data-level="3.8.3" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-covid-en-el-mundo-worldometers"><i class="fa fa-check"></i><b>3.8.3</b> Ejemplo: COVID en el mundo, Worldometers</a></li>
+<li class="chapter" data-level="3.8.4" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-con-unidades-educativas-del-min-edu"><i class="fa fa-check"></i><b>3.8.4</b> Ejemplo con unidades educativas del MIN-EDU</a></li>
+<li class="chapter" data-level="3.8.5" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-covid-bolivia-segura-worldometers"><i class="fa fa-check"></i><b>3.8.5</b> Ejemplo: COVID, Bolivia segura, Worldometers</a></li>
+<li class="chapter" data-level="3.8.6" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-ultracasas"><i class="fa fa-check"></i><b>3.8.6</b> Ejemplo: Ultracasas</a></li>
+<li class="chapter" data-level="3.8.7" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-ketal"><i class="fa fa-check"></i><b>3.8.7</b> Ejemplo: Ketal</a></li>
+<li class="chapter" data-level="3.8.8" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-ministerio-de-educación"><i class="fa fa-check"></i><b>3.8.8</b> Ejemplo: Ministerio de Educación</a></li>
+<li class="chapter" data-level="3.8.9" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejemplo-informacion-covid-19-en-bolivia"><i class="fa fa-check"></i><b>3.8.9</b> Ejemplo, informacion COVID-19 en Bolivia</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="scraping-web-raspado-web.html"><a href="scraping-web-raspado-web.html#ejercicios-propuestos"><i class="fa fa-check"></i><b>3.9</b> Ejercicios Propuestos</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html"><i class="fa fa-check"></i><b>4</b> Pre procesamiento - Gramática de datos</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#recopilación"><i class="fa fa-check"></i><b>4.1</b> Recopilación</a></li>
+<li class="chapter" data-level="4.2" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#importación"><i class="fa fa-check"></i><b>4.2</b> Importación</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#fuentes"><i class="fa fa-check"></i><b>4.2.1</b> Fuentes</a></li>
+<li class="chapter" data-level="4.2.2" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#formatos"><i class="fa fa-check"></i><b>4.2.2</b> Formatos</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#exploración"><i class="fa fa-check"></i><b>4.3</b> Exploración</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#diccionario-de-variables"><i class="fa fa-check"></i><b>4.3.1</b> Diccionario de variables</a></li>
+<li class="chapter" data-level="4.3.2" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#nombre-de-las-variables"><i class="fa fa-check"></i><b>4.3.2</b> Nombre de las variables</a></li>
+<li class="chapter" data-level="4.3.3" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#reportes-básicos"><i class="fa fa-check"></i><b>4.3.3</b> Reportes básicos</a></li>
+<li class="chapter" data-level="4.3.4" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#niveles-de-agregación"><i class="fa fa-check"></i><b>4.3.4</b> Niveles de agregación</a></li>
+<li class="chapter" data-level="4.3.5" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#descripción-univariada"><i class="fa fa-check"></i><b>4.3.5</b> Descripción univariada</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#filtrado-y-selección"><i class="fa fa-check"></i><b>4.4</b> Filtrado y selección</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#filtrado-de-observaciones"><i class="fa fa-check"></i><b>4.4.1</b> Filtrado de observaciones</a></li>
+<li class="chapter" data-level="4.4.2" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#selección-de-variables"><i class="fa fa-check"></i><b>4.4.2</b> Selección de variables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#transformación"><i class="fa fa-check"></i><b>4.5</b> Transformación</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#adecuación-de-formatos"><i class="fa fa-check"></i><b>4.5.1</b> Adecuación de formatos</a></li>
+<li class="chapter" data-level="4.5.2" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#creación-de-variables"><i class="fa fa-check"></i><b>4.5.2</b> Creación de variables</a></li>
+<li class="chapter" data-level="4.5.3" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#valores-perdidos-o-valores-nan"><i class="fa fa-check"></i><b>4.5.3</b> Valores perdidos o valores <em>NAN</em></a></li>
+<li class="chapter" data-level="4.5.4" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#valores-atípicos"><i class="fa fa-check"></i><b>4.5.4</b> Valores atípicos</a></li>
+<li class="chapter" data-level="4.5.5" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#uniendo-bases-de-datos"><i class="fa fa-check"></i><b>4.5.5</b> Uniendo bases de datos</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#muestreo-estimación-error-estándar-y-confiabilidad"><i class="fa fa-check"></i><b>4.6</b> Muestreo, estimación, error estándar y confiabilidad</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#diseño-muestral"><i class="fa fa-check"></i><b>4.6.1</b> Diseño muestral</a></li>
+<li class="chapter" data-level="4.6.2" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#estimación"><i class="fa fa-check"></i><b>4.6.2</b> Estimación</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="pre-procesamiento---gramática-de-datos.html"><a href="pre-procesamiento---gramática-de-datos.html#aproximación-visual-visualización"><i class="fa fa-check"></i><b>4.7</b> Aproximación Visual (Visualización)</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Modulo 1: Preparación de datos y análisis exploratorio</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Modulo 1: Preparación de datos y análisis exploratorio</h1>
+<h2 class="subtitle"><em>Maestría en Inteligencia Artificial, Data Science para la transformación de negocios</em></h2>
+<p class="author"><em>MSc. Alvaro Chirino Gutierrez</em></p>
+<p class="date"><em>2024-07-10</em></p>
+</div>
+<div id="prefacio" class="section level1 unnumbered hasAnchor">
+<h1>Prefacio<a href="index.html#prefacio" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />Este documento de <a href="https://twiiter/alvarochirinog">Alvaro Chirino</a> esta bajo la licencia de <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.</p>
+<div id="estructura-del-libro" class="section level2 unnumbered hasAnchor">
+<h2>Estructura del libro<a href="index.html#estructura-del-libro" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El libro inluye 5 capitulos, estos son:</p>
+<ol style="list-style-type: decimal">
+<li>Introducción a R</li>
+<li>Fundamentos del análisis de datos</li>
+<li>Fuentes de información y Raspado web</li>
+<li>Gramática de la manipulación de datos</li>
+<li>Introducción a la visualización de datos</li>
+</ol>
+</div>
+<div id="software-y-acuerdos" class="section level2 unnumbered hasAnchor">
+<h2>Software y acuerdos<a href="index.html#software-y-acuerdos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="bases-de-datos" class="section level2 unnumbered hasAnchor">
+<h2>Bases de datos<a href="index.html#bases-de-datos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="introducción-a-r.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
