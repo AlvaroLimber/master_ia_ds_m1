@@ -84,7 +84,7 @@ Los KPI están vinculados con **las metas** y objetivos estratégicos generales 
 
 > Actividad 3. Identifique 5 KPI de su respuesta en la actividad 1.
 
-## Tipos de datos
+## Tipos de datos (datasets)
 
   - *Estructurados (tabla):* Tiene la forma de una tabla, donde las filas hacen referencia a observaciones y las columnas a atributos/variables.
   - *No estructurados (no tabla):* Normalmente se refiere a archivos de audio, imágenes, documentos, etc.
@@ -92,27 +92,32 @@ Los KPI están vinculados con **las metas** y objetivos estratégicos generales 
 
 ## Captura y preservación
 
-Se refiere al proceso de obtener la información de las distintas fuentes posibles y luego pasar a un proceso de preservación. 
+Se refiere al proceso de *obtener la información* de las distintas *fuentes posibles* y luego pasar a un proceso de *preservación*. 
 
 ### Fuentes convencionales
 
 Estas están basadas en la información que se distribuye de forma tradicional mediante bases de datos estructuradas, normalmente estas las distribuyen instituciones con amplios conocimientos en la gestión de bases de datos, para el caso de Bolivia se puede citar algunas:
 
   * Instituto Nacional de Estadística
-  * SNIS
+  * SNIS: Salud
+  * SIE: Educación
   * UDAPE
-  * Geoboliva
+  * Geobolivia: Mapas
   * Ministerios ...
+  * Bancos
+  * Telecomunicaciones
   
-  + Censos
-  + Encuestas
-  + Registros administrativos
+Tipo de recolección de datos  
+  
+  + *Censos:* Recolección completa del universo, no constante pero si periódica. 
+  + *Encuestas:* Recolección parcial (muestra) del universo. 
+  + *Registros administrativos:* Recolección con fines administrativos, de forma constante. "Internet"
 
 ### Datos web y APIs
 
 Se refiere a la captura y uso de la información que se genera en espacios digitales, web, redes sociales, etc.
 
-Las APIs son puertas de entrada creadas por los administradores de una página, que permiten el acceso a información seleccionada en formatos amigables. 
+Las APIs son puertas de entrada creadas por los administradores de una página web, que permiten el acceso a información seleccionada en formatos amigables. 
 
 ### Record Linkage (enlaces/llaves)
 
@@ -124,39 +129,39 @@ Se refiere al proceso de concatenar o unir observaciones dispuestas en múltiple
 
 Esto permite mejorar la cobertura (append), ampliar las temáticas de estudio (merge). 
 
-![Pre-procesamiento](_fig/bd1.png)
-
-  * Matching: Une información a partir de una clave, existen muchos problemas con claves tipo texto.
-  * Aproximaciones a reglas para hacer math: Definir criterios para posibilitar el match basados en reglas, distancias cercanas, etc.
-  * Match basados en probabilidad: Fellegi–Sunter method
-
-![](_fig/bd2.PNG)
-
 Ejemplos: 
 
   + Pseudo-paneles: Cortes(años de nacimiento)
   + Unidades educativas: RUE
-  + Municipios: Código de 6 dígitos,       - 020101 La Paz
+  + Municipios: Código de 6 dígitos,       
+    - 020101 La Paz
     - 020105 El Alto
-  + EH: folio, UPM
   + Clasificadores: Actividades económicas, productos.
 
 ## Calidad de dato
 
-La mayoría de los datos en el mundo real son ruidosos, inconsistentes y adolecen de valores perdidos, independientemente de su origen. Incluso si la recopilación de datos es barata, los costos de crear datos de alta calidad a partir de la fuente (limpieza, conservación, estandarización e integración) son considerables. La calidad de los datos se puede caracterizar de múltiples maneras:
+La mayoría de los datos en el mundo real son *ruidosos*, *inconsistentes* y adolecen de *valores perdidos*, independientemente de su origen. Incluso si la recopilación de datos es barata, los costos de crear datos de alta calidad a partir de la fuente (limpieza, conservación, estandarización e integración) son considerables. La calidad de los datos se puede caracterizar de múltiples maneras:
 
 * **Precisión:** ¿qué tan precisos son los valores de los atributos en los datos?
 * **Integridad:** ¿están completos los datos?
-* **Consistencia:** ¿Cuán consistentes son los valores en y entre las bases de datos?
+* **Consistencia:** ¿Cuán consistentes son los valores *en* y entre las bases de datos?
 * **Puntualidad:** ¿qué tan oportunos son los datos?
 * **Accesibilidad:** ¿están disponibles todas las variables para el análisis?
 
 Los cientistas de datos tienen décadas de experiencia en la *transformación de datos desordenados, ruidosos y no estructurados* en un conjunto de *datos bien definido*, claramente estructurado y probado en calidad. 
 
-El pre procesamiento es un *proceso complejo* y que lleva mucho tiempo porque es *práctico*: requiere juicio y no puede *automatizarse de manera efectiva*. Un *flujo de trabajo* típico comprende múltiples pasos desde la definición de datos hasta el análisis y termina con el filtrado. Es difícil exagerar el valor del pre-procesamiento para cualquier análisis de datos, pero esto es particularmente cierto en big data. Los datos deben analizarse, estandarizarse, no duplicarse y normalizarse.
+> DATA > RAM
+> DATA > DISCO
+
+El pre procesamiento es un *proceso complejo* y que lleva mucho tiempo porque es *práctico*: requiere juicio y no puede *automatizarse de manera efectiva*. Un *flujo de trabajo* típico comprende múltiples pasos desde la definición de datos hasta el análisis y termina con el filtrado. 
+
+> Es difícil exagerar el valor del pre-procesamiento para cualquier análisis de datos, pero esto es particularmente cierto en big data. Los datos deben analizarse, estandarizarse, no duplicarse y normalizarse.
 
 * **Análisis (parsing):** Exploración de datos
-* **Estandarización (Standardization):** Identificar variables que requieren transformación y ajustes.
+* **Estandarización (Standardization):** Identificar variables que requieren *transformación* y *ajustes*.
+  - Adecuación de formatos
+  - Limpieza de texto
+  - Creación de nuevas variables (ingeniería de características)
 * **Duplicación:** Consiste en eliminar registros redundantes
 * **Normalización (Normalization):** Es el proceso de garantizar que los campos que se comparan entre archivos sean lo más similares posible en el sentido de que podrían haber sido generados por el mismo proceso. Como mínimo, se deben aplicar las mismas reglas de estandarización a ambos *archivos*.
 
@@ -170,11 +175,13 @@ Al pensar en machine learning debemos asociarlo directamente con *procesos compu
   * Puede recomendar libros, amistades, música, etc.
   * Identificar drogas, proteínas y ciertos génes
   * Se usa para detectar ciertos tipos de cáncer y otras enfermedades médicas.
-  * Ayudan a conocer que estudiantes necesitan un apoyo adicional 
-  * Ayudan a persuadir por que candidato votar en las elecciones. 
+  * Ayudan a conocer que estudiantes necesitan un apoyo adicional
+  * Ayudan a persuadir por que candidato votar en las elecciones.
     + Cambridge Analytica.
 
 #### El proceso del machine learning
+  
+Se parte de el planteamiento del problema, identificación de la meta, pregunta de investigación, etc.   
   
   * Entender el *problema* y la *meta*
   * Formular esto como un *problema de machine learning*
@@ -195,8 +202,9 @@ En ML existen 2 grandes categorías
     
   2. *Aprendizaje no supervisado:* No existe una variable objetivo, se quiere conocer, entender las asociaciones y patrones naturales en los datos. 
     * Asociaciones 
-    * Clustering/Agrupamiento 
-    * PCA, MCA 
+    * Clustering/Agrupamiento (*Unidad de análisis*)
+    * Reducción de dimensionalidad; PCA, MCA (*Atributos*)
+    * Análisis factorial, modelos estructurales
     
 ![](_fig/bd6.PNG)
 
@@ -215,6 +223,8 @@ El modelado de texto se clasifica en 2:
 
 ![](_fig/bd7.PNG)
 ![](_fig/bd8.PNG)
+
+> Nota: Análisis espacial, serie temporales 
 
 ## Información y visualización
 
@@ -258,8 +268,8 @@ El desarrollo de una visualización efectiva es un proceso iterativo que general
 
 ## Ejercicios
 
-1. Explorar los métodos cuasi-experimentales que existen 
+1. Explorar los métodos experimentales y cuasi-experimentales que existen 
 2. Buscar información respecto a: los matriculados en educación regular y universidad por año y departamento en Bolivia
 3. Empleando la fuente anterior, generar en R el código que cargue el archivo encontrado 
-4. Buscar dos papers (1) donde se uso machine learning y (2) análisis de texto y comentar con al menos 5000 caracteres
-5. Buscar ejemplos (al menos uno) de bases de datos, páginas web u otros asociados a datos que no respeten los principios de privacidad y confidencialidad.
+4. Buscar dos papers (1) donde se uso machine learning y (2) análisis de texto y comentar.
+5. Buscar ejemplos (al menos uno) de bases de datos, páginas web u otros asociados a datos que no respeten los principios de *privacidad y confidencialidad*.
