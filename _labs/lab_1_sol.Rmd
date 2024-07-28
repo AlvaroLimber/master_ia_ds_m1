@@ -1,0 +1,133 @@
+---
+title: "Laboratorio 1 (30 pts)"
+subtitle: "Raspado web"
+author: "MSc. Alvaro Chirino Gutierrez"
+date: "Julio, 2024"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F,message = F, warning = F)
+```
+
+# Instrucciones
+  * Forma de entrega: Todas las respuestas en un script o rmd; apellido_lab1.R.
+
+Escribir el código en R para los siguientes ejercicios
+
+```{r}
+rm(list=ls())
+library(rvest)
+library(dplyr)
+library(wbstats)
+```
+
+# Pregunta 1 (15 pts) 
+
+Usando las páginas de ultracasas e infocasas armar una base de datos que contenga toda la información disponible sobre la venta de casas en los departamentos de La Paz, Cochabamba.
+
+La base de datos debe tener las siguientes variables:
+
+  + **Fuente:** Infocasas, ultracasas
+  + **Departamento:** La Paz, Cochabamba
+  + **Precio**
+  + **Zona**
+  + **Superficie**
+
+Para las variables precio, zona y superficie no es necesario tener el valor depurado. Se espera que la base de datos tenga al menos 20 casos.
+
+Se espera contar con una sola base de datos guardada en formato RData. (Suba este archivo a la plataforma)
+
+```{r}
+###INFOCASAS
+ciudad<-c("la-paz","cochabamba")
+bd1<-NULL
+for(i in ciudad){
+  print(i)
+  for(j in 1:2){
+    print(j)
+    #i<-ciudad[1]
+    #j<-1000
+    www<-paste0("https://www.infocasas.com.bo/venta/casas/",i,"/pagina",j)
+    infocasas<-read_html(www)
+    aux<-html_nodes(infocasas,".lc-dataWrapper")
+    if(length(aux)==0){
+      print("FIN")
+      next
+    }
+    #zona
+    zona<-html_text2(html_nodes(aux, ".lc-location"))
+    #precio
+    precio<-html_text2(html_nodes(aux,".lc-price"))
+    #superficie
+    superficie<-html_text2(html_nodes(aux,".lc-typologyTag"))
+    bd1<-rbind(bd1, data.frame(zona,precio,superficie,depto=i,fuente="infocasas"))
+  }
+}
+
+###ULTRACASAS
+ciudad<-c("la-paz---la-paz", 
+"cochabamba---cochabamba")
+bd2<-NULL
+for(i in ciudad){
+  print(i)
+  for(j in 1:2){
+    print(j)
+    #i<-ciudad[1]
+    #j<-1
+    www<-paste0("https://www.ultracasas.com/buscar/casa-en-venta--en--",i,"?page=",j)
+    ultracasas<-read_html(www)
+    aux<-html_nodes(ultracasas,".pos-relative")
+    if(length(aux)==0){
+      print("FIN")
+      next
+    }
+    #zona
+    zona<-html_text2(html_nodes(aux, ".inmuebles-item-titular-tit"))
+    #precio
+    precio<-html_text2(html_nodes(aux,".inmuebles-item-precio"))
+    #superficie
+    superficie<-html_text2(html_nodes(aux,".inmuebles-item-precio"))
+    bd2<-rbind(bd2, data.frame(zona,precio,superficie,depto=i,fuente="ultracasas"))
+  }
+}
+bd<-rbind(bd1,bd2)
+save(bd,file="casas.RData")
+```
+
+  
+# Pregunta 2 (5pt) 
+
+Usando la API del Banco Mundial:
+
+  - Obtenga los datos vinculados al producto interno bruto per cápita de Bolivia, Perú, Chile y Honduras, para el periodo 1970 a 2022
+  
+```{r}
+wb_data("NY.GDP.PCAP.CD", country = c("BO", "PE", "CL", "HN"), start_date = 1970, end_date = 2022)
+```
+  
+# Pregunta 3 (5pt) 
+
+Usando la API del banco mundial obtenga la variación porcentual de la tasa bruta de natalidad por cada 1000 personas del 2022 respecto el 2000 para Bolivia. 
+
+```{r}
+aux<-wb_data("SP.DYN.CBRT.IN", country = "BO", start_date = 2000, end_date = 2022)
+vf<-aux$SP.DYN.CBRT.IN[aux$date==2022]
+vi<-aux$SP.DYN.CBRT.IN[aux$date==2000]
+res<-((vf-vi)/vi)*100
+res
+```
+
+# Pregunta 4 (5pt) 
+
+Usando la librería rvest, obtenga todas las tablas del enlace https://anda.ine.gob.bo/index.php/catalog/107/study-description y presente el máximo número de filas que se presenta en las tablas extraídas.
+
+```{r}
+www<-"https://anda.ine.gob.bo/index.php/catalog/107/study-description"
+ine<-read_html(www)
+aux<-html_table(ine)
+max(unlist(lapply(aux, nrow)))
+```
+
