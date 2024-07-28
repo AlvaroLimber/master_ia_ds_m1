@@ -1,0 +1,54 @@
+# Visualización
+
+**Gramática de figuras**
+
+Al hacer un gráfico se debe definir 3 aspectos:
+
+  1. Información (dataset)
+  2. Estética (componentes)
+  3. Geometría 
+
+```{r}
+rm(list = ls())
+library(ggplot2) # gramática de gráficos
+library(haven)
+library(dplyr)
+library(labelled)
+load("_bd/eh21.RData")
+####figuras de origen R
+hist(eh21pe$s01a_03)
+boxplot(eh21pe$s01a_03)
+boxplot(eh21pe$s01a_03~eh21pe$area)
+boxplot(eh21pe$ylab)
+pie(prop.table(table(eh21pe$area))*100)
+barplot(prop.table(table(eh21pe$area))*100)
+####GGPLOT2
+ggplot(eh21pe, aes(x=s01a_03))+geom_boxplot()
+
+ggplot(eh21pe, aes(x=s01a_03))+geom_histogram()
+
+ggplot(eh21pe %>% filter(depto==9 & ylab <20000) , 
+  aes(x=s01a_03,                   y=aestudio,
+      col=as_factor(s01a_02),
+      size=ylab,
+      pch=as_factor(area)
+      )) +
+  geom_point() + facet_wrap(~as_factor(p0))
+
+library(plotly)
+
+g1<-ggplot(eh21pe %>% filter(depto==9), aes(s01a_03,ylab)) + geom_point()
+g1
+
+ggplotly(g1)
+
+ggplot(eh21pe , aes(aestudio, ylab, label=s01a_03)) + geom_label()
+
+t1<-eh21pe %>% group_by(depto) %>% summarise(p0=mean(p0,na.rm = T)*100) %>% arrange(p0)
+
+ggplot(t1,aes(as_factor(depto),p0))+ geom_bar(stat = "identity", fill="red",alpha=0.3)+ ylab("Pobreza Moderada") + xlab("Departamento") + ggtitle("Pobreza moderada por departamento, 2021")
+
+```
+
+
+

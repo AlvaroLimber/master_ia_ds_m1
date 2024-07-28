@@ -108,3 +108,11 @@ muestreo-estimación-error-estándar-y-confiabilidad
 diseño-muestral
 estimación
 aproximación-visual-visualización
+actividad-1-8-min.
+tipos-de-datos-datasets
+fuentes-de-información-y-scraping-web-raspado-web
+fuentes-de-información-convencionales
+almacenamiento
+importación-del-dataset
+scraping-web
+visualización

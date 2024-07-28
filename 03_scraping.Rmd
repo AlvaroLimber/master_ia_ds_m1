@@ -4,7 +4,64 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Scraping Web (Raspado web)
+# Fuentes de información y Scraping Web (Raspado web)
+
+## Fuentes de información convencionales
+
+  - *Censos*: La principal amenaza corresponde a la sobre y sub cobertura. 
+  - *Encuestas:* Hay diferencia entre encuestas "sondeos" que se realizan sin un enfoque estadístico y encuestas que siguen un esquema de *muestreo aleatorio*. Ejemplo; dataset la encuesta de hogares 2022 del INE
+  - *Registros administrativos:* Normalmente los registros administrativos tienen problemas de contenido. Ejemplo; dataset de importaciones y exportaciones del INE del 2023/2024. 
+  
+> ACTIVIDAD PARA LA PRÓXIMA CLASE: Buscar y descargar los ficheros de la encuesta a hogares y las importaciones y exportaciones.  
+  
+### Almacenamiento
+
+Para el almacenamiento se recomienda establecer un protocolo de "guardado":
+
+  - Espacio de almacenamiento 
+  - Formato del fichero, se recomienda homogenizar. 
+  - Es necesario un tratamiento del dataset? *ETL/ELT*.
+  
+### Importación del dataset
+
+En el caso del R, se recomienda tener un proyecto y dentro de este proyecto tener una carpeta para almacenar los datos en un formato RData.
+
+```{r}
+#importar archivos en excel
+library(readxl)
+exp23<-read_xlsx("~/Documentos/datos/EXPORTACIONES 2023p.xlsx")
+exp24<-read_excel("_data/EXPORTACIONES ENE A MAY 2024p.xlsx")
+imp23<-read_xlsx("~/Documentos/datos/IMPORTACIONES_2023p.xlsx")
+imp24<-read_xlsx("~/Documentos/datos/IMPORTACIONES_ENE_MAY_2024p.xlsx")
+save(exp23, exp24, imp23, imp24, file = "_data/ie2324.RData")
+#Windows
+#C:/Documentos/datos/EXPORTACIONES 2023p.xlsx
+#C:\\Documentos\\datos\\EXPORTACIONES 2023p.xlsx
+rm(list=ls())
+load("_data/ie2324.RData")
+```
+
+```{r}
+#Para la encuesta a hogares
+library(haven)
+library(labelled)#etiquetas
+eh22d<-read_sav("~/Documentos/datos/BD22/BD/EH2022_Discriminacion.sav")
+
+aux<-dir("~/Documentos/datos/BD22/BD/")
+d0<-"~/Documentos/datos/BD22/BD/"
+
+eh22d<-read_sav(paste0(d0,aux[1]))
+eh22e<-read_sav(paste0(d0,aux[2]))
+eh22g<-read_sav(paste0(d0,aux[3]))
+eh22p<-read_sav(paste0(d0,aux[4]))
+eh22s<-read_sav(paste0(d0,aux[5]))
+eh22v<-read_sav(paste0(d0,aux[6]))
+save(eh22d, eh22e, eh22g, eh22p, eh22s, eh22v, file="_data/eh22.RData")
+```
+
+> Para exportar datos en R, se utiliza los comandos que empiezan con write.
+
+## Scraping Web
 
 La definición del scraping web que se toma en este documento proviene de [@Mitchell2015] que expresa:
 
@@ -22,20 +79,8 @@ Siguiendo a [@Iacus2015] que establece cinco pasos al momento de decidir recopil
 4. Equilibrar las *ventajas* y *desventajas* de las *posibles fuentes de datos*. Los aspectos relevantes pueden ser la *disponibilidad* (¡y la *legalidad*!), los *costos* de recolección, la *compatibilidad* de nuevas fuentes con la investigación existente, pero también factores *muy subjetivos* como la *aceptación* de la fuente de datos por parte de otros. También piense en posibles formas de *validar* la *calidad de sus datos.* ¿Existen otras fuentes independientes que brinden información similar para que sean posibles verificaciones cruzadas aleatorias? En caso de datos secundarios, ¿puede identificar la fuente original y verificar los errores de transferencia?
 5. ¡Toma una decisión! Elija la fuente de datos que le parezca más adecuada, *documente* los motivos de la decisión y comience con los preparativos para la *recopilación*. Si es factible, recopile datos de *varias fuentes* para validar las fuentes de datos. Muchos problemas y beneficios de varias *estrategias de recopilación* de datos salen a la luz solo después de la recopilación real.
 
-> Actividad (8 min): Buscar artículos de investigación (paper) que usen el web scraping. Fuente de datos, objetivo, método.
-
-  - Título; La mujer en youtube, representación y participación
-    + Fuente de datos: youtube
-    + Objetivo: Brechas de género
-    + Método: Analítica descriptiva
-  - Título: La prolongación de la crisis sanitaria
-    + Fuente de datos: fuentes abiertas con datos del covid
-    + Objetivo: Impactos de la pandemia
-    + Método: Analítica descriptiva/diagnóstica
-  - Título: Aplicaciones y herramientas para el WS
-    + Fuente de datos: Tiendas online
-    + Objetivo: extraer los datos (xml, sql, excel)
-    + Métodos: ---
+> Actividad (10 min): Buscar artículos de investigación (paper) que usen el web scraping. 
+Fuente de datos, objetivo, método.
     
 ## Tecnologías de diseminación, extracción y almacenamiento Web
 
@@ -61,7 +106,7 @@ library(xtable)
 findPackage(c("API","scrape"),limit.results=-1)
 ```
 
-> Actividad 2 (NEO)
+> Actividad 2
 
 Siguiendo los 5 pasos mencionados anteriormente, defina un tema de interés.
 
@@ -100,98 +145,58 @@ Existe la herramienta selectorgadget disponible en http://selectorgadget.com/, e
   * **html_text**: para extraer texto de un html_nodes
   * **html_table**: para extraer tablas y ponerlas en data frame
 
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
-# Web scraping
+Como se vio antes, una herramienta para facilitar la identificación del CSS o "nodo" es el selector gadget.
 
-## Librería rvest
-
-  - Optimizada para páginas estáticas.
-  - Se encuentra dentro del universo "tidyverse"
-  
 ```{r}
 rm(list = ls())
-#install.packages("rvest")
-#install.packages("xml2")
 library(rvest)
-library(xml2)
-```
+library(dplyr)# gramática del manejo de datos (Tipo SQL)
 
-  * **read_html**: para cargar la estructura de la página
-  * **html_nodes**: para extraer información de la página según el CSS selector
-  * **html_text**: para extraer texto de un html_nodes
-  * **html_table**: para extraer tablas y ponerlas en data frame
+mean(iris$Petal.Length)#R de origen
 
-Como se vi antes, una herramienta para facilitar la identificación del CSS o "nodo" es el selector gadget.
+iris %>% select(Petal.Length, Petal.Width) %>% colMeans()
+iris$Petal.Length %>% mean()
+# %>% Operador pipe ctr mayus m
+# com1(com2(com3(..))) -> com1 %>% com2 %>% com3 (...)
+www1<-"https://www.urgente.bo/"
+urgente<-read_html(www1)
 
-### Ejemplo: COVID-19
+urgente %>% html_nodes(".header-top-left") %>% html_nodes("p") %>% html_text2()
 
-```{r}
-www<-"https://www.worldometers.info/coronavirus/"
-covid<-read_html(www)
+urgente %>% html_nodes(".header-top-left p") %>% html_text2()
 
-bd<-html_table(covid)
-View(bd[[1]])
-View(bd[[2]])
-View(bd[[3]])
-t1<-bd[[1]]
-t2<-bd[[2]]
-t3<-bd[[3]]
-str(t2)
+urgente %>% html_nodes("h2") %>% html_text2()
 
-aux<-html_nodes(covid,".maincounter-number")
-html_text(aux)
-html_text2(aux)
-html_attrs(aux)
-html_children(aux)
+urgente %>% html_nodes(".normal-image-content")  %>% html_text2()
 
-html_nodes(aux,"span")
-```
+titular<-urgente %>% html_nodes(".normal-image-content") %>% html_nodes("h2") %>% html_text2()
 
-### Ejercicio: Prensa digital
+informacion<-urgente %>% html_nodes(".normal-image-content p") %>% html_text2()
 
-A partir de la página de Urgentebo, capture los titulares. 
-```{r}
-www<-"https://www.urgente.bo/"
-prensa<-read_html(www)
-aux<-html_nodes(prensa,"h2")
-html_text2(aux)
+bdu<-data.frame(titular, informacion)
 
-aux2<-html_nodes(prensa,".normal-image-content")
-html_text2(html_nodes(aux2,"h2"))
-```
+#raspado de la sección de deportes
 
-### Ejemplo: Tiendas digitales
+www2<-"https://www.urgente.bo/deportes?page="
+pg<-0
+deporte<-read_html(paste0(www2,pg))
+deporte %>% html_nodes(".news-box") %>% html_nodes(".clearfix") %>% html_children() %>% html_children() %>% html_children()
 
-```{r}
-# FIDALGA
-www<-"https://www.fidalga.com/collections/panaderia-y-reposteria"
-tienda<-read_html(www)
+aux<-deporte %>% html_nodes(".news-box") %>% html_nodes(".clearfix a") %>% html_attr("href")
 
-aux<-html_nodes(tienda,".grid-item-border")
-html_text2(html_nodes(aux,".price-regular"))
-# ultracasas
+read_html(aux[40])
 
-www<-"https://www.ultracasas.com/buscar/casa-en-venta--en--la-paz---la-paz?page=5"
+deporte %>% html_nodes(".view-taxonomy-term .views-row h2 a") %>% html_attr("href")
 
-casa<-read_html(www)
-aux<-html_nodes(casa,".pos-relative")
-html_text2(html_nodes(aux,".inmuebles-item-precio"))
+www3<-"https://www.worldometers.info/coronavirus/"
+covid<-read_html(www3)
+casos<-covid %>% html_nodes(".maincounter-number") %>% html_text2()
+casos<-as.numeric(gsub(",","",casos))
 
-# generalización
+covidt<-covid %>% html_table()
+covidt[[3]]
 
-www<-"https://www.ultracasas.com/buscar/casa-en-venta--en--la-paz---la-paz?page="
-for(i in 1:7){
-  print(i)
-  casa<-read_html(paste0(www,i))
-  aux<-html_nodes(casa,".pos-relative")
-  print(
-  html_text2(html_nodes(aux,".inmuebles-item-precio"))
-  )
-}
+load("~/Documentos/GitHub/aru_news/larazon.RData")
 ```
 
 ### Ejemplo: enlaces descargables
@@ -204,15 +209,17 @@ library(xml2)
 www<-"https://www.asfi.gob.bo/index.php/mv-estadisticas/mv-boletines-estadisticos.html"
 asfi<-read_html(www)
 reportes<-html_nodes(asfi,"td")
+#reportes<-asfi %>% html_nodes("td")
 aux<-html_attr(html_nodes(reportes,"a"),"href")
+#aux<-reportes %>% html_nodes("a") %>% html_attr("href")
 aux1<-paste0("https://www.asfi.gob.bo",aux)
 pp<-grep(".xlsx",aux1)
 aux2<-aux1[pp]
 
-download.file(aux1[7],"C:\\Users\\clases\\Desktop\\asfi\\boletin.xlsx", mode = "wb")
-
+download.file(aux2[1] , "_data/enero2024.xlsx", mode = "wb")
 for(i in 1:length(aux2)){
-  nombre<-paste0("C:\\Users\\clases\\Desktop\\asfi\\boletin_",i,".xlsx")
+  print(i)
+  nombre<-paste0("_data/boletin/bol_",i,".xlsx")
   download.file(aux2[i],nombre, mode = "wb")
 }
 ```
@@ -227,7 +234,8 @@ for(i in 1:length(aux2)){
 rm(list=ls())
 library(rvest)
 library(xml2)
-www<-"https://www.infocasas.com.bo/venta/casas/la-paz/pagina3"
+library(dplyr)
+www<-"https://www.infocasas.com.bo/venta/casas/la-paz/pagina1"
 ####base de datos
 infocasas<-read_html(www)
 aux<-html_nodes(infocasas,".lc-dataWrapper")
@@ -237,47 +245,32 @@ zona<-html_text2(html_nodes(aux, ".lc-location"))
 precio<-html_text2(html_nodes(aux,".lc-price"))
 #superficie
 superficie<-html_text2(html_nodes(aux,".lc-typologyTag"))
-bd<-data.frame(zona,precio,superficie,depto="La Paz",fuente="infocasas")
+bd<-data.frame(zona,precio,superficie, depto="La Paz",fuente="infocasas")
+###############################
+#recolección de más páginas
+www<-"https://www.infocasas.com.bo/venta/casas/la-paz/pagina"
+bd<-NULL
+for(i in 1:23){
+  print(i)
+  infocasas<-read_html(paste0(www,i))  
+  aux<-html_nodes(infocasas,".lc-dataWrapper")
+  #zona
+  zona<-html_text2(html_nodes(aux, ".lc-location"))
+  #precio
+  precio<-html_text2(html_nodes(aux,".lc-price"))
+  #superficie
+  superficie<-html_text2(html_nodes(aux,".lc-typologyTag"))
+  bdaux<-data.frame(zona,precio,superficie, depto="La Paz",fuente="infocasas")
+  bd<-bd %>% bind_rows(bdaux)
+}
+bd %>% View()
 ```
+
+> Actividad: Completar el dataset para Cochabamba y Santa Cruz y raspar los datos de ultracasas. 
 
 ## APIs
 
 Conocida también por la sigla API,"*application programming interface*", es un conjunto de sub rutinas, funciones y procedimientos (o métodos, en la programación orientada a objetos) que ofrece cierta *biblioteca* para ser utilizado por otro *software*. Ofrece una entrada a los datos que distribuye el API.
-
-### API Google trends
-
-La libraría *gtrendsR* permite acceder a la API de [google trends](https://trends.google.es/trends/?geo=ES), esta permite acceder a las tendencias de búsqueda que se realizan mediante el motor de búsqueda de Google.
-
-Algunos ejemplos de aplicación
-
-  + Comportamiento de las negociaciones en el mercado financiero. (Deuda)
-  + Estimar la incidencia de tipo de influenza (epidemiología) 
-  + Bienestar mental en el COVID-19 (salud mental)
-  + Análisis de subidas de casos de COVID-19. (síntomas)
-  + Detectar polen atmosférico (alergias)
-
-```{r}
-rm(list=ls())
-#install.packages("gtrendsR")
-library(gtrendsR)
-#library(help=gtrendsR)
-bd1<-gtrends("Bolivia")
-
-View(bd1$interest_over_time)
-plot(bd1)
-
-bd2<-gtrends("Bolivia", time = "today 1-m")
-plot(bd2)
-View(bd2$interest_over_time)
-
-bd3<-gtrends(c("Bolivia", "Eliminatorias"), time = "today 1-m", geo = "BO")
-plot(bd3)
-View(countries)
-
-bd4<-gtrends(c("dolar", "inflacion","Luis Arce"), time = "today 1-m", geo = "BO")
-plot(bd4)
-View(bd4$related_queries)
-```
 
 ### API Banco Mundial
 
@@ -293,9 +286,10 @@ La API ofrece acceso a las estadísticas que genera (capta) el Banco Mundial, ex
 En R se puede acceder mediante la librería wbstats.
 
 ```{r,eval=F}
-install.packages("wbstats")
+rm(list=ls())
+#install.packages("wbstats")
 library("wbstats")
-library(help="wbstats")
+#library(help="wbstats")
 #paso 1, instalar el rtools: https://cran.r-project.org/bin/windows/Rtools/
 #paso 2, instalar devtools
 #install.packages("devtools")
@@ -305,7 +299,6 @@ library(help="wbstats")
 #install_github("nset-ornl/wbstats")
 #acceso a todos los indicadores disponibles
 wbindex<-wb_indicators("es")
-
 bd1<-wb_data("1.0.HCount.1.90usd")
 #búsqueda de indicador
 index_edu<-wb_search(pattern = "education")
@@ -314,344 +307,25 @@ index_pib<-wb_search(pattern = "gdp")
 # ver los países y sus códigos 
 wbpais<-wb_countries()             
 #Comando para extraer los indicadores
-t1<-wb_data(country = c("BOL","PER"),indicator = "NY.GDP.MKTP.CD", start_date = 1900, end_date = 2023)
+t1<-wb_data(country = c("BOL","PER"), indicator = "NY.GDP.MKTP.CD", start_date = 1900, end_date = 2024)
+
+t1[t1$iso2c=="BO", ]
+
+plot(t1$date[t1$iso2c=="BO"], t1$NY.GDP.MKTP.CD[t1$iso2c=="BO"], col="red", type = "b")
+
+plot(t1$date[t1$iso2c=="PE"], t1$NY.GDP.MKTP.CD[t1$iso2c=="PE"], col="blue", type = "b")
+#unir
+plot(t1$date[t1$iso2c=="BO"], t1$NY.GDP.MKTP.CD[t1$iso2c=="BO"], col="red", type = "b", ylim = c(0, 300000000000))
+points(t1$date[t1$iso2c=="PE"], t1$NY.GDP.MKTP.CD[t1$iso2c=="PE"], col="blue", type = "b")
 
 t2<-wb_data(country = c("BOL","PER"),indicator = "SE.SEC.TCHR", start_date = 2000, end_date = 2020)
 ```
-
-
-## Ejemplos pasados
-
-### Ejemplo: Infocasas, ventas La Paz
-
-```{r,eval=F}
-library(rvest)
-#test
-infocasa<-read_html("https://www.infocasas.com.bo/venta/inmuebles/la-paz/pagina1")
-node<-html_nodes(infocasa,"strong")
-price<-html_text(node)
-price[3:23]
-#colección de todos los precios
-price<-NULL
-for(i in 1:16){
-  print(i)
-  url<-paste0("https://www.infocasas.com.bo/venta/inmuebles/la-paz/pagina",i)
-  infocasa<-read_html(url)
-  node<-html_nodes(infocasa,"strong")
-  aux<-html_text(node)
-  price<-c(price,aux[3:23])
-}
-price<-price[1:328]
-price<-gsub("U$S ","",price,fixed = T)
-price<-gsub(",","",price,fixed = T)
-class(price)
-price<-as.numeric(price)
-price<-na.omit(price)
-price<-price[price>1000 & price<10000000]
-summary(price)
-```
-
-### Ejemplo: Titulares de La Razon
-
-```{r,eval=F}
-lr<-read_html("https://www.la-razon.com/")
-node<-html_nodes(lr,".title")
-html_text(node)
-```
-
-### Ejemplo: COVID en el mundo, Worldometers
-
-```{r,eval=F}
-library(rvest)
-covid<-read_html("https://www.worldometers.info/coronavirus/")
-tab<-html_table(covid)
-bd<-tab[[1]]#hoy
-tab[[2]]#ayer
-tab[[3]]#2 días
-```
-
-Ejercicio: mostrar un gráfico para las muertes por país en base a la información del COVID-19 y también mostrar un ranking de los países con más avance en la vacunación al día de hoy (13/4).
-
-```{r,eval=F}
-library(dplyr)
-names(bd)[1]<-"id"
-names(bd)[12]<-"muertesM"
-names(bd)[2]<-"pais"
-t1<-bd %>% filter(is.na(id)==F) %>% select(pais,muertesM) %>% mutate(muertesM=as.numeric(gsub(",","",muertesM)))
-t1<-na.omit(t1)
-t1<-t1[order(t1$muertesM),]
-plot(1:204,t1$muertesM,type="h")
-#vacunas
-vc<-read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
-head(vc)
-str(vc)
-library(lubridate)
-library(ggplot2)
-vc$date<-ymd(vc$date)
-ggplot(vc %>% filter(iso_code=="BOL"),aes(date,daily_vaccinations))+geom_line()
-
-vc %>% filter(iso_code=="CHL") %>% select(date,daily_vaccinations) %>% plot(type="b",col="red")
-```
-
-### Ejemplo con unidades educativas del MIN-EDU
-
-```{r,echo=F,eval=F}
-setwd("G:\\Mi unidad\\DatosGeoBolivia\\mde\\EstabEducativos")
-library(foreign)
-edu<-read.dbf("EstabEducativos.dbf",as.is = T)
-edu$COD_SIE
-library(rvest)
-rue<-c(82160036,70550008,80730123)
-bd<-NULL
-for(i in rue){
-  www<-paste0("http://seie.minedu.gob.bo/reportes/mapas_unidades_educativas/ficha/ver/",i)
-ue<-read_html(www)
-s1<-html_table(ue)
-s2<-html_text(html_nodes(ue,"dd"))
-s3<-html_text(html_nodes(ue,"li"))
-s4<-html_text(html_nodes(ue,".m-b"))
-#tarea (20 min): a partir de la información obtenida plantear y crear la estructura de  la base de datos.
-aux<-data.frame(cbind(s1[[1]][2,-1],s1[[1]][3,-1],
-      s1[[2]][2,-1],s1[[2]][3,-1],
-      s1[[3]][2,-1],s1[[3]][3,-1],
-      s1[[4]][2,-1],s1[[4]][3,-1],
-      t(s2),t(s3),t(s4)))
-names(aux)<-paste0("v",1:70)
-aux$rue<-i
-bd<-rbind(bd,aux)
-}
-#TAREA, utilizando la base de datos, genere un vector de rue limpio, implemente en el código anterios para generar la base de datos, si la UE no se puede cargar busque una solución para el que el for no se detenga.
-```
-
-
-### Ejemplo: COVID, Bolivia segura, Worldometers
-
-```{r,eval=F}
-library(rvest)
-bs1<-read_html("https://www.boliviasegura.gob.bo/index.php")
-bs2<-read_html("https://www.boliviasegura.gob.bo/datos.php")
-
-aux<-html_nodes(bs1,".casos")
-casos<-html_text(aux)
-
-aux<-html_nodes(bs1,".recuperados")
-recup<-html_text(aux)
-
-aux<-html_nodes(bs1,".decesos")
-muerte<-html_text(aux)
-
-html_text(html_nodes(bs1,".card-text"))
-
-tbs<-html_table(bs2,fill = T)
-View(tbs)
-
-mun<-tbs[[12]]
-table(mun$`Nivel Anterior`,mun$`Nivel Actual`)
-
-t1<-tbs[[2]]
-global<-c(casos, recup,muerte)
-
-str(t1)
-
-#herramientas para trabajar con texto
-
-t1$Acumulado
-
-nchar(t1$Acumulado)
-substr(t1$Acumulado,1,3)
-grep("53",t1$Acumulado)
-gsub("53","XX",t1$Acumulado)
-
-t1$Acumulado<-as.numeric(gsub(",","",t1$Acumulado))
-t1$Decesos<-as.numeric(gsub(",","",t1$Decesos))
-t1$Recuperados<-as.numeric(gsub(",","",t1$Recuperados))
-library(ggplot2)
-
-ggplot(t1,aes(Acumulado,Decesos))+geom_point()
-
-### worldometers
-wm<-read_html("https://www.worldometers.info/coronavirus/")
-tabla<-html_table(wm)
-
-t2<-tabla[[1]]
-str(t2)
-
-aux<-is.na(t2$`#`)
-
-t2<-t2[!aux,]
-
-for(i in c(3:15,17:19)){
-  print(i)
-  t2[,i]<-gsub("+","",t2[,i])
-  t2[,i]<-as.numeric(gsub(",","",t2[,i]))
-}
-t2$`Tests/1M pop`
-ggplot(t2, aes(`Tot Cases/1M pop`,`Tests/1M pop`,))+geom_point()+facet_wrap(~Continent)
-```
-
-
-### Ejemplo: Ultracasas
-
-* Motivación: Explorar el mercado de casas en Bolivia
-
-```{r,eval=F}
-ultra<-read_html("https://www.ultracasas.com/buscar/casa-en-venta--en--la-paz---la-paz?page=1")
-#titulo
-aux1<-html_text(html_nodes(ultra,".line-height-30px"))[-1] #zona
-aux2<-html_text(html_nodes(ultra,".text-ellipsis"))[-1][seq(2,24,2)]
-#precio
-aux3<-html_text(html_nodes(ultra,"h4"))[-c(1:2,15:17)]
-#metros, dormitorios, baños
-aux<-html_text(html_nodes(ultra,".icon-default-color"))
-aux4<-aux[seq(1,36,3)]#dormitorios
-aux5<-aux[seq(2,36,3)]#baños/duchas
-aux6<-aux[seq(3,36,3)]#metros2
-#base inicial
-bd0<-data.frame(titulo=aux1,zona=aux2,precio=aux3,bed=aux4,bath=aux5,m2=aux6)
-
-for(i in 2:26){
-  print(i)
-  www<-paste0("https://www.ultracasas.com/buscar/casa-en-venta--en--la-paz---la-paz?page=",i)
-  ultra<-read_html(www)
-#titulo
-aux1<-html_text(html_nodes(ultra,".line-height-30px"))[-1] #zona
-aux2<-html_text(html_nodes(ultra,".text-ellipsis"))[-1][seq(2,24,2)]
-#precio
-aux3<-html_text(html_nodes(ultra,"h4"))[-c(1:2,15:17)]
-#metros, dormitorios, baños
-aux<-html_text(html_nodes(ultra,".icon-default-color"))
-aux4<-aux[seq(1,36,3)]#dormitorios
-aux5<-aux[seq(2,36,3)]#baños/duchas
-aux6<-aux[seq(3,36,3)]#metros2
-#base inicial
-bd1<-data.frame(titulo=aux1,zona=aux2,precio=aux3,bed=aux4,bath=aux5,m2=aux6)
-bd0<-rbind(bd0,bd1)
-}
-```
-
-
-### Ejemplo: Ketal
-
-Una de las potencialidades del scraping es poder rescatar información contenida en páginas web, según la estructura de esta, en esta sección se presenta un ejemplo del código y la recolección de información que puede realizarse. Para esto se eligió la página de supermercados Ketal que es abierta y publica los precios de sus distintos productos de forma categorizada por tipo de productos. 
-
-El estudio de esta pagina tiene el principal objetivo de mostrar el proceso de extracción, el uso potencial de la información esta relacionada a tener la variación de los precios y para futuros estudios se podría completar el ejercicio incluyendo la parte de la demanda mediante la encuesta de presupuestos familiares y poder así pronosticar la inflación dentro de este sector y para la población potencial que acude a supermercados.
-
-El ejemplo presenta el proceso del scraping para 8 grupo de productos:
-
-* Carne de aves
-* Carne de cerdo
-* Carne de res
-* Pescado
-* Leches
-* Aceites
-* Frutas y verduras
-* Dulces
-
-
-Se emplea la librería *rvest*, que es un paquete diseña para para facilitar la descarga y la manipulación de HTML y XML. También se utiliza la extensión Selector Gadget https://selectorgadget.com, este permite la identificación de las estructuras de las páginas web.
-
-El objetivo del raspado es obtener el nombre del producto, su código, y el precio. Utilizando el selector gadget se identifica que en $.product-name$ se guardan los nombres, en $.price.product-price$ el precio del producto y en $data-id-product$ el identificador del producto. En R el código es:
-
-```{r,eval=FALSE}
-#librerías para el raspado
-library(rvest)
-#Enlaces de los grupos de productos
-ave <- read_html("https://www.ketal.com.bo/209-aves")
-cerdo<-read_html("https://www.ketal.com.bo/208-cerdo")
-res<-read_html("https://www.ketal.com.bo/210-res")
-fish<-read_html("https://www.ketal.com.bo/17060162-pescados")
-leches<-read_html("https://www.ketal.com.bo/53-leches-liquidas")
-aceites<-read_html("https://www.ketal.com.bo/272-aceites-y-vinagres")
-frutaver<-read_html(
-  "https://www.ketal.com.bo/50-frutas-y-verduras?id_category=50&n=150")
-dulce<-read_html(
-  "https://www.ketal.com.bo/15-chocolates-y-golosinas?id_category=15&n=150")
-#definición de la base de datos que guarda la información
-bd<-NULL
-#Algoritmo del raspado de los 8 productos
-k<-1
-for(i in list(ave,cerdo,res,fish,leches,aceites,frutaver,dulce)){
-  print(k)
-  name<-html_attr(html_nodes(i,".product-name"),"title")[-1]
-  precio<-html_text(
-    html_nodes(i,".price.product-price"),trim=T)[seq(1,length(name)*2,2)]
-  code<-html_attr(html_nodes(i,".add_to_compare"),"data-id-product")
-  bd<-rbind(bd,data.frame(name,precio,code))
-  k<-k+1
-}
-#se identifica el día
-day<-substr(Sys.time(),1,10)
-#se guarda la informacion en base al dia del raspado
-bd$day<-day
-save(bd,file = paste0(day,".RData"))
-```
-
-### Ejemplo: Ministerio de Educación
-
-```{r, eval=FALSE}
-library(rvest)
-library(foreign)
-library(xlsx)
-########################
-bd<-read.dta("mmUE.dta")
-rue<-bd$cod_ue_det
-rue<-unlist(strsplit(rue,";"))
-bd<-data.frame(matrix(0,1,78))
-k<-1
-for(i in 325:length(rue)){
- print(i)
-urlmin<-paste0("http://seie.minedu.gob.bo/reportes/mapas_unidades_educativas/ficha/ver/",rue[i])
- ue <- read_html(urlmin,encoding = "UTF-8")
-
-jj<-grepl("Error was",unlist(strsplit(html_text(html_nodes(ue,"strong"))[1:2],":"))[c(2)])
-if(jj==T){
-  next()
-}
-#nombre id (2)
-bd[k,1:2]<-unlist(strsplit(html_text(html_nodes(ue,"strong"))[1:2],":"))[c(2,4)]
-#Informacion administrativa (12)
-bd[k,3:14]<-html_text(html_nodes(ue,"dd"))
-#matricula #promovidos #reprobacion #abandono # (60)
-#matricula
-for(j in 1:4){
-bd[k,(15*j):(14+15*j)]<-as.integer(unlist(html_table(ue)[j])[-c(1:3)])
-}
-#servicios (4)
-bd[k,75:78]<-html_text(html_nodes(ue,"strong"))[18:21]
-k<-k+1
-}
-write.xlsx(bd,"ue2017.xlsx",row.names = F)
-```
-
-### Ejemplo, informacion COVID-19 en Bolivia
-
-```{r,eval=F}
-library(rvest)
-#paso 0: Estadísticas del covid-19 en Bolivia
-#paso 1: cargar la www de interés
-bs<-read_html("https://www.boliviasegura.gob.bo/")
-ww<-read_html("https://www.worldometers.info/coronavirus/")
-#paso 2: Raspar la información de interés
-node0<-html_nodes(bs,"h1")
-node1<-html_text(node0)
-node2<-as.numeric(node1) 
-barplot(node2,legend.text = c("Confirmados","Recuperados","Muertes"))
-
-aux<-html_nodes(bs,".mapanuevos")
-#paso 3: trabajando con tablas
-tabla<-html_table(bs,fill = T)
-tabla[[2]]
-#paso 4: limpieza
-#paso 5: Análisis
-```
-
-
 
 ## Ejercicios Propuestos
 
 1. Extraer la fecha, y el precio de compra y venta del dolar de la página https://www.bcb.gob.bo
 2. Usando la página https://www.trabajopolis.bo/ seleccionar un departamento y armar una base de dato de ofertas laborales
 3. Armar una base de datos en base a la página https://www.infocasas.com.bo
-4. Explorar librarias API con acceso a Youtube y encontrar los 10 videos con más visualizaciones que incluyan a Bolivia en su titulo.
-5. Explorar la libraria gtrendsR y explorar en que meses en Bolivia es mas frecuente la búsqueda de 
-6. Usar la informacion de worldometers y generar un gráfico de contagios por millon de los distintos paises.
+4. Explorar librerias API con acceso a Youtube y encontrar los 10 videos con más visualizaciones que incluyan a Bolivia en su titulo.
+5. Explorar la libreria gtrendsR y explorar en que meses en Bolivia es mas frecuente la búsqueda de ...
+6. Usar la información de worldometers y generar un gráfico de contagios por millón de los distintos países.
