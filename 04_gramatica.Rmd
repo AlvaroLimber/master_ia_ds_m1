@@ -503,5 +503,55 @@ t3 %>% full_join(t4)
 load("_data/eh22.RData")
 ```
 
-# Ejercicios
+# Ejercicios resueltos
 
+```{r}
+rm(list=ls())
+library(haven)
+library(labelled)
+library(dplyr)
+```
+
+1. (EH22) Obtener el promedio de edad de las mujeres jefas de hogar
+
+```{r}
+load("_data/eh22.RData")
+eh22p %>% filter(s01a_05==1 & s01a_02==2) %>% summarise(promedio=mean(s01a_03)) 
+```
+
+2. (EH22) Obtener el porcentaje de hogares pobres moderados de los hogares que tengan personas menores de 12 años
+
+```{r}
+# Variable de pobreza moderada (pobreza por ingreso): p0
+# se puede explorar las etiquetas con: var_label(eh22p)
+#En una sola consulta
+eh22p %>% mutate(m12=(s01a_03<12)) %>% group_by(folio) %>% mutate(m12=max(m12)) %>% ungroup() %>%  filter(s01a_05==1 & m12==1) %>% summarise(pobreza=mean(p0)*100)
+# en varias consultas
+#1. Identificamos a las personas que tienen menos de 12 años
+aux<-eh22p %>% mutate(m12=(s01a_03<12))
+#2 se agrega la información a nivel de hogares
+aux1<-aux %>% group_by(folio) %>% summarise(m12=max(m12))
+#3 une con la información original y se filtran los casos a nivel de hogar usando el criterio del jefe de hogar (un solo jefe por hogar)
+eh22p %>% left_join(aux1) %>% filter(m12==1 & s01a_05==1) %>% summarise(pobreza=mean(p0)*100)
+```
+
+3. Obtener la descripción del  producto que tenga la mayor diferencia entre su valor de exportación e importación para el 2024
+
+```{r}
+rm(list = ls())
+load("_data/ie2324.RData")
+t1<-imp24 %>% group_by(NANDINA) %>% summarise(vimp=sum(FRO))
+t2<-exp24 %>% group_by(NANDINA) %>% summarise(vexp=sum(VALOR))
+t3<-t1 %>% inner_join(t2)
+t3 %>% mutate(aux=vexp-vimp) %>% arrange(-aux) %>% head(1)
+#buscando la descripción de 2711210000
+imp24 %>% count(NANDINA, DESNAN) %>% filter(NANDINA==2711210000) %>% select(DESNAN)
+```
+
+# Ejercicio propuestos
+
+1. (EH22) Obtenga el promedio de años de educación de personas mayores a 18 años, del área rural del departamento de Beni.
+
+2. (EH22) Obtenga el porcentaje de hogares con piso de tierra según el sexo del jefe/a de hogar
+
+3. Obtenga el mes y punto de aduana con el mayor saldo comercial de 2023.
